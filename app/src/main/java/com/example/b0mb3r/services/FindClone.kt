@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONObject
 
-class FindClone(context: Context) : BaseService(context) {
+class FindClone(context: Context) : POSTService(context) {
     override val baseUrl: String = "https://findclone.ru/register"
     override val serviceName: String
         get() = "FindClone"

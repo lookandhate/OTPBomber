@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONObject
 
-class YadnexEda(context: Context) : BaseService(context) {
+class YadnexEda(context: Context) : POSTService(context) {
     override val baseUrl: String = "https://eda.yandex/api/v1/user/request_authentication_code"
     override val serviceName: String
         get() = "YandexEda"

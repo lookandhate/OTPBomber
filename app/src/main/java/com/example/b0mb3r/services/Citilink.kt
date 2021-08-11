@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONObject
 
-class Citilink(context: Context) : BaseService(context) {
+class Citilink(context: Context) : POSTService(context) {
     override val baseUrl: String = "https://www.citilink.ru/registration/confirm/phone/+79278214538/"
     override val serviceName: String
         get() = "Citilink"
