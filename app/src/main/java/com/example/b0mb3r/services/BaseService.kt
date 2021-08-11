@@ -16,20 +16,5 @@ open class BaseService(context: Context) : ServiceAbstractClass(context) {
         Log.d(LogTag, "$serviceName executed")
     }
 
-    fun makeRequest(json: JSONObject) {
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, baseUrl, json,
-            { response ->
-                Log.d("Request", "Response: $response")
-            },
-            { error ->
-                Log.e("Request", "Error occured: ${error.networkResponse.toString()}} \n" +
-                        "Stack trace: ${error.stackTrace.asList().toString()}")
-            }
-        )
-
-        // Access the RequestQueue through your singleton class.
-        queue.add(jsonObjectRequest)
-    }
 
 }
