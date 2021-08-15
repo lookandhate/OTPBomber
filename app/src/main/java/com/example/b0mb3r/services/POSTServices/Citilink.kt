@@ -1,7 +1,8 @@
-package com.example.b0mb3r.services
+package com.example.b0mb3r.services.POSTServices
 
 import android.content.Context
 import android.util.Log
+import com.example.b0mb3r.services.POSTService
 import org.json.JSONObject
 
 class Citilink(context: Context) : POSTService(context) {

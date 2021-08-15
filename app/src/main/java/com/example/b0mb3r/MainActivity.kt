@@ -1,7 +1,9 @@
 package com.example.b0mb3r
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.*
@@ -16,14 +18,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.Checkbox
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.get
 import com.example.b0mb3r.models.NumberToAttackViewModel
 import com.example.b0mb3r.models.ServiceViewModel
+import com.example.b0mb3r.services.BaseService
 
 
 import com.example.b0mb3r.ui.theme.B0mb3rTheme
@@ -144,23 +145,50 @@ fun StartAttackButton() {
     val numberToAttackViewModel = provider[NumberToAttackViewModel::class.java]
     val servicesViewModel = provider[ServiceViewModel::class.java]
 
+    val currentContext: Context = LocalContext.current
+
     val numberToAttackState = numberToAttackViewModel.Number.observeAsState()
     val servicesState = servicesViewModel.mapOfServices.observeAsState()
 
-    fun onClick() {
+    fun onClick(context: Context) {
         Log.d("OnClick", "Number to attack is ${numberToAttackState.value}")
         Log.d("OnClick", servicesViewModel.GetCheckedServices().toString())
-        servicesViewModel.GetCheckedServices()
-            ?.forEach { numberToAttackViewModel.Number.value?.let { it1 -> it.execute(it1) } }
+
+        // TODO Change Placholder 5 to more meaningful number
+        numberToAttackState.value?.let {
+            startAttack(servicesViewModel.GetCheckedServices(), it, 2,
+                { num -> Toast.makeText(context,  "$num attack of 5 completed", Toast.LENGTH_SHORT) },
+                { Toast.makeText(context, "All attacks completed", Toast.LENGTH_LONG) }
+            )
+        }
 
     }
 
     Column(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
         Button(
             modifier = Modifier.wrapContentSize(),
-            onClick = { onClick() }) {
+            onClick = { onClick(currentContext) }) {
             Text(text = "Start Attack")
         }
     }
+
+}
+
+
+fun startAttack(
+    services: List<BaseService>?,
+    numberToAttack: String,
+    attacks: Int,
+    attackCompletedCallback: (attackNumber: Int) -> Unit,
+    allAttacksCompletedCallback: () -> Unit
+) {
+    for (i in 1..attacks) {
+        services!!.forEach { it.execute(numberToAttack);
+            Log.d("startAttack", "Sleepinkg a bit");
+            Thread.sleep(1_000) }
+
+        attackCompletedCallback(i)
+    }
+    allAttacksCompletedCallback()
 
 }

@@ -7,7 +7,7 @@ import java.util.*
 abstract class ServiceAbstractClass constructor(context: Context) {
 
     val queue = Volley.newRequestQueue(context)
-    val LogTag = "Services"
+    open val LogTag = "Services"
 
 
     abstract val baseUrl: String;

@@ -3,27 +3,31 @@ package com.example.b0mb3r.services
 import android.content.Context
 import android.util.Log
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import org.json.JSONObject
+import kotlin.math.max
+import kotlin.math.min
 
-class GETService(context: Context) : BaseService(context) {
-
+open class GETService(context: Context) : BaseService(context) {
+    override val LogTag = "GETService"
 
     fun makeRequest(urlToSendRequestTo: String) {
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, urlToSendRequestTo, JSONObject(),
+        Log.d("GETService", "Performing request to $urlToSendRequestTo")
+        // Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, urlToSendRequestTo,
             { response ->
-                Log.d("Request", "Response: $response")
+                // Display the first 500 characters of the response string.
+                Log.d(LogTag, "Response is: ${response.substring(0, min(500, response.length - 1))}")
             },
             { error ->
-                Log.e(
-                    "Request", "Error occured: ${error.networkResponse.toString()}} \n" +
-                            "Stack trace: ${error.stackTrace.asList().toString()}"
-                )
+
+                Log.e(LogTag, "Error occured: ${error.networkResponse}")
             }
         )
 
         // Access the RequestQueue through your singleton class.
-        queue.add(jsonObjectRequest)
+        queue.add(stringRequest)
     }
 }
